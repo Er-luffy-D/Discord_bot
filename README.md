@@ -14,5 +14,5 @@ pip install -r requirements.txt
 1. Launch the application by executing the `main.py` file:
 
 ```bash
-python qr.py
+python main.py
 ```
