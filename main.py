@@ -16,7 +16,7 @@ async def ping(ctx):
 
 
 client.remove_command("help")
-# Embeded help command 
+# Embeded help command (working rn..........)
 
 
 
