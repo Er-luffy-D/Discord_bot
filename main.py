@@ -42,7 +42,8 @@ async def help(ctx):
 
 @client.command()
 async def qna(ctx, *, question):
-  await ctx.send(ans(question))
+  res = ans(question)
+  await ctx.send(res)
 
 
 # Making bot react on a msg using emoji
