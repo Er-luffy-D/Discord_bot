@@ -25,6 +25,8 @@ async def ping(ctx):
 
 client.remove_command("help")
 
+# Embeded help command (working rn..........)
+
 
 # Embeded help command
 @client.command(pass_context=True)
