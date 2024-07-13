@@ -5,6 +5,9 @@ __pycache__/
 
 # Token file
 token.txt
+# API KEY
+api.txt
+
 # C extensions
 *.so
 
