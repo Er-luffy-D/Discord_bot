@@ -16,3 +16,5 @@ pip install -r requirements.txt
 ```bash
 python main.py
 ```
+
+## FOR CONTRIBUTION GO THROUGH THIS [CONTRIBUTION](CONTRIBUTING.md)
