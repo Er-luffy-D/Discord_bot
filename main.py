@@ -4,6 +4,7 @@ import discord
 from discord.ext import commands
 from discord.flags import Intents
 import sys
+from math import ceil
 
 # Adding commands dir
 sys.path.insert(0, './commands')
@@ -23,15 +24,14 @@ async def ping(ctx):
   await ctx.send(f'yay! {round(client.latency*1000)}ms')
 
 
+#  Removing default help command
 client.remove_command("help")
-
-# Embeded help command (working rn..........)
 
 
 # Embeded help command
 @client.command(pass_context=True)
 async def help(ctx):
-  embed = discord.Embed(color=discord.Color.purple())
+  embed = discord.Embed(color=discord.Color.red())
   embed.set_author(name="Help : list of commands available")
   embed.add_field(name=".ping",
                   value="Returns bot respond time in seconds",
@@ -40,10 +40,15 @@ async def help(ctx):
   await ctx.send(embed=embed)
 
 
+# QNA commands ->
 @client.command()
 async def qna(ctx, *, question):
   res = ans(question)
-  await ctx.send(res)
+  if len(res) > 1950:
+    for i in range(ceil(len(res) / 1950)):
+      await ctx.send(res[i * 1950:1950 * (i + 1)])
+  else:
+    await ctx.send(res)
 
 
 # Making bot react on a msg using emoji
@@ -59,4 +64,18 @@ async def on_command_error(ctx, error):
   await ctx.send(f'Error. Try .help ({error})')
 
 
+# NEXT FEATURES
+"""
+- Weather
+- News
+- Jokes
+- Reminders
+- Music
+- Image Generation
+- Anime
+
+
+"""
+
+# To run the bot
 client.run(token)
