@@ -1,15 +1,17 @@
 from logging import disable
 import os
+import sys
 import discord
+from discord import embeds
 from discord.ext import commands
 from discord.flags import Intents
-import sys
 from math import ceil
 
 # Adding commands dir
 sys.path.insert(0, './commands')
 
 from ques import ans
+from joke import start
 
 with open("token.txt", "r") as f:
   token = f.read()
@@ -36,6 +38,7 @@ async def help(ctx):
   embed.add_field(name=".ping",
                   value="Returns bot respond time in seconds",
                   inline=False)
+  embed.add_field(name=".joke", value="Returns a Daddy Joke", inline=False)
   embed.add_field(name=".qna", value="Ask any Question", inline=False)
   await ctx.send(embed=embed)
 
@@ -49,6 +52,15 @@ async def qna(ctx, *, question):
       await ctx.send(res[i * 1950:1950 * (i + 1)])
   else:
     await ctx.send(res)
+
+
+# Jokes commands ->
+@client.command()
+async def joke(ctx):
+  res = start()
+  embed = discord.Embed(color=discord.Color.orange())
+  embed.add_field(name=res[0], value=res[1], inline=False)
+  await ctx.send(embed=embed)
 
 
 # Making bot react on a msg using emoji
