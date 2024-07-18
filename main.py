@@ -10,8 +10,10 @@ from math import ceil
 # Adding commands dir
 sys.path.insert(0, './commands')
 
+# importing commands in main
 from ques import ans
-from joke import start
+from joke import joke_res
+from weather import weather_response
 
 with open("token.txt", "r") as f:
   token = f.read()
@@ -57,10 +59,36 @@ async def qna(ctx, *, question):
 # Jokes commands ->
 @client.command()
 async def joke(ctx):
-  res = start()
+  res = joke_res()
   embed = discord.Embed(color=discord.Color.orange())
   embed.add_field(name=res[0], value=res[1], inline=False)
   await ctx.send(embed=embed)
+
+
+#weather command->
+@client.command()
+async def weather(ctx, city):
+  res = weather_response(city)
+  embed = discord.Embed(title="Weather", color=0x109319)
+  # Adding details from response
+  embed.set_author(name=ctx.author.display.name,
+                   icon_url=ctx.author.avatar_url)
+
+  embed.add_field(name="Temperature",
+                  value=f"Current temperature is {res['main']['temp']} °C",
+                  inline=True)
+  embed.add_field(name="Field 2 Title",
+                  value="It is inline with Field 3",
+                  inline=True)
+  embed.add_field(name="Field 3 Title",
+                  value="It is inline with Field 2",
+                  inline=True)
+  embed.set_footer(
+      # not working rn
+      text="Information requested by: {}".format(ctx.author.display_name))
+  await ctx.send(embed=embed)
+
+  # embed.set_thumbnail(url="https://i.imgur.com/axLm3p6.jpeg")
 
 
 # Making bot react on a msg using emoji
