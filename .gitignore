@@ -5,7 +5,11 @@ __pycache__/
 
 # Token file
 token.txt
-# API KEY
+
+# API KEYS FOR RAPIDAPI
+constants.py
+
+# API KEY for gemini
 api.txt
 
 # C extensions

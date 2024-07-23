@@ -1,11 +1,12 @@
 # weather
 import requests
+from constants import rapid_key
 
 
 def weather_response(city):
     url = f"https://open-weather13.p.rapidapi.com/city/{city}/EN"
     headers = {
-        "x-rapidapi-key": "49ea0f74e0mshd8194fee70e06d9p10071fjsna5e143eb6977",
+        "x-rapidapi-key": f"{rapid_key}",
         "x-rapidapi-host": "open-weather13.p.rapidapi.com"
     }
     try:

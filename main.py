@@ -1,10 +1,13 @@
 from logging import disable
 import os
 import sys
+from constants import main_channel
 import discord
 from discord import embeds
+from discord import channel
 from discord.ext import commands
 from discord.flags import Intents
+import datetime
 from math import ceil
 
 # Adding commands dir
@@ -19,7 +22,7 @@ with open("token.txt", "r") as f:
   token = f.read()
 
 # Set up the bot
-client = commands.Bot(command_prefix=".", intents=discord.Intents.all())
+client = commands.Bot(command_prefix=".", intents=Intents.all())
 
 
 # Define the command to send a message
@@ -40,8 +43,14 @@ async def help(ctx):
   embed.add_field(name=".ping",
                   value="Returns bot respond time in seconds",
                   inline=False)
-  embed.add_field(name=".joke", value="Returns a Daddy Joke", inline=False)
-  embed.add_field(name=".qna", value="Ask any Question", inline=False)
+  embed.add_field(name=".joke", value="Returns a Joke", inline=False)
+  embed.add_field(name=".qna <Question>",
+                  value="Ask any Question",
+                  inline=False)
+  embed.add_field(name=".weather <city>",
+                  value="Know about weather",
+                  inline=False)
+
   await ctx.send(embed=embed)
 
 
@@ -60,35 +69,47 @@ async def qna(ctx, *, question):
 @client.command()
 async def joke(ctx):
   res = joke_res()
-  embed = discord.Embed(color=discord.Color.orange())
-  embed.add_field(name=res[0], value=res[1], inline=False)
-  await ctx.send(embed=embed)
+  await ctx.send(res[0] + " ....XD")
 
 
 #weather command->
 @client.command()
 async def weather(ctx, city):
   res = weather_response(city)
-  embed = discord.Embed(title="Weather", color=0x109319)
-  # Adding details from response
-  embed.set_author(name=ctx.author.display.name,
-                   icon_url=ctx.author.avatar_url)
+  embed = discord.Embed(title=f"Weather of {res['name']}", color=0x109319)
 
-  embed.add_field(name="Temperature",
-                  value=f"Current temperature is {res['main']['temp']} °C",
-                  inline=True)
-  embed.add_field(name="Field 2 Title",
-                  value="It is inline with Field 3",
-                  inline=True)
-  embed.add_field(name="Field 3 Title",
-                  value="It is inline with Field 2",
+  embed.add_field(name="Condition",
+                  value=f"Current Weather :{res['weather'][0]['description']}",
+                  inline=False)
+  embed.add_field(
+      name="Temperature",
+      value=
+      f"Current temperature is {str(((res['main']['temp']-32)*5)/9)[:4]} °C",
+      inline=True)
+  embed.add_field(name="Humidity",
+                  value=f"{res['main']['humidity']} g/m^3",
                   inline=True)
   embed.set_footer(
-      # not working rn
-      text="Information requested by: {}".format(ctx.author.display_name))
+      text=f"Date: {datetime.datetime.now().strftime('%d-%m-%Y')}")
   await ctx.send(embed=embed)
 
-  # embed.set_thumbnail(url="https://i.imgur.com/axLm3p6.jpeg")
+
+@client.event
+async def on_ready():
+  print("Bot is online")
+
+
+#
+@client.event
+async def on_member_join(member):
+  channel = client.get_channel(main_channel)
+  await channel.send(f"Welcome to the server {member.mention}")
+
+
+@client.event
+async def on_member_remove(member):
+  channel = client.get_channel(main_channel)
+  await channel.send(f"Goodbye {member.mention}")
 
 
 # Making bot react on a msg using emoji
@@ -106,9 +127,7 @@ async def on_command_error(ctx, error):
 
 # NEXT FEATURES
 """
-- Weather
 - News
-- Jokes
 - Reminders
 - Music
 - Image Generation
