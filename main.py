@@ -89,23 +89,50 @@ async def weather(ctx, city):
   embed.add_field(name="Humidity",
                   value=f"{res['main']['humidity']} g/m^3",
                   inline=True)
+  embed.add_field(name="Country",
+                  value=f"{res['sys']['country']}",
+                  inline=False)
   embed.set_footer(
       text=f"Date: {datetime.datetime.now().strftime('%d-%m-%Y')}")
   await ctx.send(embed=embed)
 
 
+# join the voice channel
+@client.command(pass_context=True)
+async def join(ctx):
+  if (ctx.author.voice):
+    channel = ctx.message.author.voice.channel
+    await channel.connect()
+  else:
+    await ctx.send("You are not in a voice channel")
+
+
+@client.command(pass_context=True)
+async def leave(ctx):
+  if (ctx.voice_client):
+    await ctx.guild.voice_client.disconnect()
+    await ctx.send("I left the voice channel")
+  else:
+    await ctx.send("I am not in a voice channel")
+
+
+# Events
+
+
+# when bot is ready
 @client.event
 async def on_ready():
   print("Bot is online")
 
 
-#
+# Member joining the server
 @client.event
 async def on_member_join(member):
   channel = client.get_channel(main_channel)
   await channel.send(f"Welcome to the server {member.mention}")
 
 
+# Member leaving the server
 @client.event
 async def on_member_remove(member):
   channel = client.get_channel(main_channel)
