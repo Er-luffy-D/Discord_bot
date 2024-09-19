@@ -13,8 +13,7 @@ model = genai.GenerativeModel('gemini-1.5-flash')
 
 def ans(text):
   try:
-    response = model.generate_content(
-        text)
+    response = model.generate_content(text)
     res_tex = response.text
   except Exception as e:
     return f"Error found Try again . If it persists contact the owner. \n{e}"

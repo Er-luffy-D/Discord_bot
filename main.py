@@ -17,6 +17,7 @@ sys.path.insert(0, './commands')
 from ques import ans
 from joke import joke_res
 from weather import weather_response
+from anime import current
 
 with open("token.txt", "r") as f:
   token = f.read()
@@ -49,6 +50,9 @@ async def help(ctx):
                   inline=False)
   embed.add_field(name=".weather <city>",
                   value="Know about weather",
+                  inline=False)
+  embed.add_field(name=".ongoing",
+                  value="returns top animes of current season",
                   inline=False)
 
   await ctx.send(embed=embed)
@@ -95,6 +99,20 @@ async def weather(ctx, city):
   embed.set_footer(
       text=f"Date: {datetime.datetime.now().strftime('%d-%m-%Y')}")
   await ctx.send(embed=embed)
+
+
+# Anime ongoing command ->
+@client.command()
+async def ongoing(ctx):
+  res = current()
+  embed = discord.Embed(title="Ongoing Animes =>", color=0x109319)
+  for x in res:
+    name, date = x.split("_")
+    embed.add_field(name=name, value=date, inline=False)
+  await ctx.send(embed=embed)
+
+
+# Anime search command ->
 
 
 # join the voice channel
@@ -154,11 +172,11 @@ async def on_command_error(ctx, error):
 
 # NEXT FEATURES
 """
-- News
+- News 
 - Reminders
 - Music
 - Image Generation
-- Anime
+- Anime (almost done)
 
 
 """
