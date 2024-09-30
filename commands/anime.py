@@ -12,7 +12,7 @@ def current():
   date = [i.find_all("span", class_='item')[0].text for i in date]
   anime_list = [f"{(name[i])}_{date[i]}" for i in range(len(name))]
 
-  return anime_list[:10]
+  return anime_list[:20]
 
 
 def search(anime_name):

@@ -18,7 +18,7 @@ from ques import ans
 from joke import joke_res
 from weather import weather_response
 from anime import current
-
+from github import git
 with open("token.txt", "r") as f:
   token = f.read()
 
@@ -99,6 +99,41 @@ async def weather(ctx, city):
   embed.set_footer(
       text=f"Date: {datetime.datetime.now().strftime('%d-%m-%Y')}")
   await ctx.send(embed=embed)
+
+
+# Github query command ->
+@client.command()
+async def github(ctx, owner: str):
+  repo_data = git(owner)
+  if repo_data:
+    embed = discord.Embed(
+        title=repo_data['login'],
+        url=repo_data['html_url'],
+        description=f"GitHub Profile of {repo_data['login']}",
+        color=discord.Color.green())
+
+    embed.add_field(name="Name",
+                    value=repo_data.get('name', 'N/A'),
+                    inline=True)
+    embed.add_field(name="Public Repos",
+                    value=repo_data['public_repos'],
+                    inline=True)
+    embed.add_field(name="Followers",
+                    value=repo_data['followers'],
+                    inline=True)
+    embed.add_field(name="Following",
+                    value=repo_data['following'],
+                    inline=True)
+    embed.add_field(name="Location",
+                    value=repo_data.get('location' or 'N/A'),
+                    inline=False)
+
+    embed.set_thumbnail(url=repo_data['avatar_url'])
+
+    # Send the embed to the channel
+    await ctx.send(embed=embed)
+  else:
+    await ctx.send("User not found!")
 
 
 # Anime ongoing command ->
